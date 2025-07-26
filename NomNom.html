@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NomNom - Explore</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Rubik', sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #000;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #000;
+      height: 70px;
+      padding: 0 30px;
+    }
+
+    .logo img {
+      height: 80px;
+    }
+
+    .search-bar input {
+      width: 300px;
+      padding: 10px 15px;
+      border-radius: 20px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+
+    .main-content {
+      text-align: center;
+      margin: 30px; 
+    }
+
+    .categories {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      padding-right: 27%;
+    }
+    .main-content h3{
+        padding-right: 27%;
+    }
+
+    .category {
+      text-align: center;
+      padding: 20px;
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    .category:hover {
+      transform: scale(1.1);
+    }
+
+    .category img {
+      width: 80px;
+      height: 80px;
+      background: white;
+      border-radius: 50%;
+      padding: 10px;
+    }
+
+    .menu-button {
+      background-color: #FF5722;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      margin: 30px 0 20px 30px;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .content-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0 30px;
+    }
+
+    .menu-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 20px;
+      flex: 3;
+      padding-left: 55px ;
+    }
+
+    .menu-item {
+      width: 220px;
+      padding: 15px;
+      background-color: #f5f5f5;
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: left;
+      color: #000;
+      position: relative;
+    }
+
+    .menu-item img {
+      width: 100%;
+      border-radius: 10px;
+      height: 120px;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .menu-item h4 {
+      font-size: 16px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .menu-item p {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .menu-item .price {
+      font-weight: bold;
+      color: #000;
+      margin-bottom: 5px;
+    }
+
+    .add-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background-color: #1ed760;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      font-size: 20px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .basket {
+      width: 250px;
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+      margin-left: 20px;
+      flex: 1;
+      position: sticky;
+      top: 20px;
+    }
+
+    .basket li:hover {
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      padding: 2px;
+    }
+    .basket h4 {
+      margin-bottom: 10px;
+    }
+
+    .basket ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .basket li {
+      margin-bottom: 5px;
+    }
+
+    .basket-total {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="logo.png" alt="NomNom Logo">
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Search...">
+    </div>
+  </header>
+
+  <section class="main-content">
+    <h3>Order your favorite meals online, and get them delivered to you!</h3>
+
+    <div class="categories">
+      <div class="category" onclick="filterMenu('food')">
+        <img src="food.jpeg" alt="Food">
+        <p>Food</p>
+      </div>
+      <div class="category" onclick="filterMenu('drink')">
+        <img src="drink.jpeg" alt="Drinks">
+        <p>Drinks</p>
+      </div>
+      <div class="category" onclick="filterMenu('dessert')">
+        <img src="Dessert.jpeg" alt="Dessert">
+        <p>Dessert</p>
+      </div>
+    </div>
+
+    <button class="menu-button" onclick="showAllMenu()">Menu</button>
+
+    <div class="content-wrapper">
+      <div class="menu-section" id="menu"></div>
+      <div class="basket">
+        <h4>Basket</h4>
+        <ul id="basket-list"></ul>
+        <div class="basket-total">Total: KSh<span id="basket-total">0</span></div>
+        <button onclick="checkout()" style="margin-top:10px;background:#FF5722;color:white;border:none;padding:8px 12px;border-radius:5px;cursor:pointer;">Checkout</button>
+        <button onclick="clearBasket()" style="margin-top:10px;background:#999;color:white;border:none;padding:8px 12px;border-radius:5px;margin-left:10px;cursor:pointer;">Clear</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const menuData = [
+      { name: '1/4kg Bhajia', category: 'food', description: 'Crispy potato fritters spiced and golden fried.', price: 500, image: 'https://i.pinimg.com/1200x/bb/e5/65/bbe5657b62d6be4a95d33cb5d0895972.jpg' },
+      { name: 'Pizza', category: 'food', description: 'Cheesy classic.', price: 750, image: "pizza.jpeg" },
+      { name: 'Burger', category: 'food', description: 'Beef & cheese.', price: 600, image: 'food icon.jpeg' },
+      { name: 'Sushi', category: 'food', description: 'Fresh rolls.', price: 1200, image: 'https://i.pinimg.com/736x/e0/6b/89/e06b893b9c01eb16fa69297d9dbf1f58.jpg' },
+      { name: 'Steak', category: 'food', description: 'Grilled to perfection.', price: 1500, image: 'https://i.pinimg.com/736x/5f/b0/f3/5fb0f3738b1720140a0413be8a4c2ae7.jpg' },
+      { name: 'Tacos', category: 'food', description: 'Mexican flavor.', price: 700, image: 'https://i.pinimg.com/736x/f8/0c/44/f80c4456c146835d47495b2f2d272676.jpg' },
+      { name: 'Noodles', category: 'food', description: 'Spicy delight.', price: 550, image: 'https://i.pinimg.com/736x/ae/ff/5c/aeff5c0ba41bdadb8afd91fb021fe3bf.jpg' },
+      { name: 'Pasta', category: 'food', description: 'Italian taste.', price: 650, image: 'https://i.pinimg.com/1200x/b0/7c/66/b07c66cec2d71da1d03b68da6f90335c.jpg' },
+      { name: 'Fried Chicken', category: 'food', description: 'Crispy & juicy.', price: 850, image: 'https://i.pinimg.com/1200x/4f/ed/02/4fed027e6c8f65e84e1ebe1fa9678018.jpg' },
+      { name: 'Hot Dog', category: 'food', description: 'Street snack.', price: 400, image: 'https://i.pinimg.com/736x/67/05/54/67055480d9f94913266bf87fa642d3fb.jpg' },
+      { name: 'Orange Juice', category: 'drink', description: 'Fresh & healthy.', price: 250, image: 'https://i.pinimg.com/736x/e8/df/00/e8df0010f656b5fd6b7c4f4323ec9288.jpg' },
+      { name: 'Coffee', category: 'drink', description: 'Strong and bold.', price: 300, image: 'cafe.jpeg' },
+      { name: 'Tea', category: 'drink', description: 'Relaxing sip.', price: 200, image: 'https://i.pinimg.com/736x/ae/70/df/ae70df8240fbfe842398aa089c6fb97d.jpg' },
+      { name: 'Smoothie', category: 'drink', description: 'Fruit blended.', price: 350, image: 'https://i.pinimg.com/736x/6e/4a/28/6e4a28e112e0256b5289998efc93f730.jpg' },
+      { name: 'Milkshake', category: 'drink', description: 'Sweet chill.', price: 300, image: 'https://i.pinimg.com/736x/17/86/06/178606675b71caed36ae5d5dcdd617b7.jpg' },
+      { name: 'Coconut Water', category: 'drink', description: 'Natural refreshment.', price: 270, image: 'https://i.pinimg.com/736x/ce/86/8d/ce868ddf6bf1bf552bc897ad4fd94c8c.jpg' },
+      { name: 'Lemonade', category: 'drink', description: 'Zesty splash.', price: 280, image: 'https://i.pinimg.com/736x/93/ee/20/93ee20287f13f86937f425ac053b7a21.jpg' },
+      { name: 'Energy Drink', category: 'drink', description: 'Boost up.', price: 320, image: 'https://i.pinimg.com/1200x/00/f5/29/00f529230f8e5ad6a4379a4bf10340fb.jpg' },
+      { name: 'Beer', category: 'drink', description: 'Chilled classic.', price: 350, image: 'https://i.pinimg.com/736x/8c/f3/3f/8cf33fc383ee4d817a04f7d33b734daa.jpg' },
+      { name: 'Cake', category: 'dessert', description: 'Soft & sweet.', price: 400, image: 'https://i.pinimg.com/1200x/7b/48/9d/7b489d30c4509ee2331adc360c628939.jpg' },
+      { name: 'Ice Cream', category: 'dessert', description: 'Frozen treat.', price: 300, image: 'https://i.pinimg.com/736x/89/12/63/8912632579c998626287339fa4d3a8e9.jpg' },
+      { name: 'Donut', category: 'dessert', description: 'Frosted joy.', price: 250, image: 'https://i.pinimg.com/1200x/66/75/fe/6675fe80cec7c9ae75aedeb53a20134d.jpg' },
+      { name: 'Brownie', category: 'dessert', description: 'Choco bite.', price: 350, image: 'https://i.pinimg.com/736x/f8/01/2b/f8012bd5959e5cd1ae8ab6489cd42bde.jpg' },
+      { name: 'Cheesecake', category: 'dessert', description: 'Creamy slice.', price: 450, image: 'https://i.pinimg.com/1200x/de/a0/1a/dea01a87b4e0389b06ea43a19e6af30c.jpg' },
+      { name: 'Cupcake', category: 'dessert', description: 'Mini sweet.', price: 300, image: 'https://i.pinimg.com/1200x/0b/c1/59/0bc159ffdf1fd39282c9ef3ba7413d6a.jpg' },
+      { name: 'Pudding', category: 'dessert', description: 'Soft delight.', price: 320, image: 'https://i.pinimg.com/736x/26/75/d7/2675d71396d515785595ec4f641be2f5.jpg' },
+      { name: 'Tart', category: 'dessert', description: 'Fruit crust.', price: 380, image: 'https://i.pinimg.com/1200x/26/02/c0/2602c071b0105ce5e164c6dfdec266c9.jpg' },
+      { name: 'Mousse', category: 'dessert', description: 'Chocolate fluff.', price: 370, image: 'https://i.pinimg.com/1200x/c9/fe/b6/c9feb60fa35ac7b249250983656b2b0a.jpg' },
+      { name: 'Macaron', category: 'dessert', description: 'Colorful crisp.', price: 390, image: 'https://i.pinimg.com/736x/1a/8b/2c/1a8b2c6d4ed0c4d63feb4d80bf6ab423.jpg' }
+    ];
+
+  const menuContainer = document.getElementById('menu');
+  const basketList = document.getElementById('basket-list');
+  const basketTotal = document.getElementById('basket-total');
+  const searchInput = document.querySelector('.search-bar input');
+
+  let basket = {};
+
+  function renderMenu(items) {
+    menuContainer.innerHTML = '';
+    items.forEach(item => {
+      const div = document.createElement('div');
+      div.className = `menu-item ${item.category}`;
+      div.innerHTML = `
+        <img src="${item.image}" alt="${item.name}">
+        <h4>${item.name}</h4>
+        <p>${item.description}</p>
+        <div class="price">KSh${item.price}.00</div>
+        <button class="add-btn" onclick='addToBasket(${JSON.stringify(item)})'>+</button>
+      `;
+      menuContainer.appendChild(div);
+    });
+  }
+
+  function filterMenu(category) {
+    const filtered = menuData.filter(item => item.category === category);
+    renderMenu(filtered);
+  }
+
+  function showAllMenu() {
+    renderMenu(menuData);
+  }
+
+  function addToBasket(item) {
+    if (basket[item.name]) {
+      basket[item.name].quantity += 1;
+    } else {
+      basket[item.name] = { ...item, quantity: 1 };
+    }
+    updateBasket();
+  }
+
+  function removeFromBasket(name) {
+    delete basket[name];
+    updateBasket();
+  }
+
+  function clearBasket() {
+    basket = {};
+    updateBasket();
+  }
+
+  function updateBasket() {
+    basketList.innerHTML = '';
+    let total = 0;
+
+    Object.values(basket).forEach(item => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        ${item.name} x${item.quantity} - KSh${item.price * item.quantity}
+        <button onclick="removeFromBasket('${item.name}')" style="margin-left:10px;color:red;border:none;background:none;cursor:pointer;">x</button>
+      `;
+      basketList.appendChild(li);
+      total += item.price * item.quantity;
+    });
+
+    basketTotal.textContent = total;
+  }
+
+  searchInput.addEventListener('input', () => {
+    const searchTerm = searchInput.value.toLowerCase();
+    const filtered = menuData.filter(item => 
+      item.name.toLowerCase().includes(searchTerm) ||
+      item.description.toLowerCase().includes(searchTerm)
+    );
+    renderMenu(filtered);
+  });
+
+function checkout() {
+  if (Object.keys(basket).length === 0) {
+    alert("Your basket is empty!");
+    return;
+  }
+
+  // Save basket to localStorage for access on payment page
+  localStorage.setItem('basket', JSON.stringify(basket));
+  localStorage.setItem('total', basketTotal.textContent);
+
+  // Redirect to payment page
+  window.location.href = "payment.html";
+}
+
+
+  renderMenu(menuData);
+  </script>
+</body>
+</html>

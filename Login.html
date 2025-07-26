@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NomNom - Login</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome v4 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-image: url("wallpaper.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+      color: white;
+      margin-bottom: 15%;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 999;
+      background: transparent;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .back-arrow {
+      font-size: 22px;
+      color: white;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .back-arrow:hover {
+      color: #FF5722;
+    }
+
+    header img {
+      width: 110px;
+      height: auto;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #FF5722;
+    }
+
+    .spacer {
+      height: 100px;
+    }
+
+    main {
+      width: 90%;
+      max-width: 400px;
+      margin: 120px auto 0;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    main h2 {
+      margin-bottom: 25px;
+      font-size: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      background: #f2f2f2;
+      color: #333;
+    }
+
+    .form-group span {
+      font-size: 14px;
+      display: block;
+      margin-top: 5px;
+    }
+
+    .error {
+      color: #ff4d4d;
+    }
+
+    .success {
+      color: #4CAF50;
+    }
+
+    .forgot-password {
+      text-align: right;
+      margin-top: -10px;
+      margin-bottom: 20px;
+    }
+
+    .forgot-password a {
+      font-size: 14px;
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .forgot-password a:hover {
+      color: #FF5722;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #FF5722;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: black;
+    }
+
+    @media (max-width: 500px) {
+      main {
+        margin-top: 150px;
+        padding: 20px;
+      }
+
+      header {
+        padding: 10px 20px;
+      }
+
+      .nav-links {
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <a href="#"><img src="logo.png" alt="NomNom Logo" /></a>
+      <a href="javascript:history.back()" class="back-arrow" title="Go Back">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="#">Inquiries</a>
+      <a href="#">About us</a>
+    </div>
+  </header>
+
+  <div class="spacer"></div>
+
+  <main>
+    <h2>Login</h2>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="Enter your email" oninput="validateLogin()" />
+      <span id="email-error"></span>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input id="password" type="password" placeholder="Enter your password" oninput="validateLogin()" />
+      <span id="password-error"></span>
+    </div>
+    <div class="forgot-password">
+      <a href="#">Forgot password?</a>
+    </div>
+    <button onclick="submitLogin()">Login</button>
+  </main>
+
+  <script>
+    function setMessage(id, message, isValid) {
+      const el = document.getElementById(id);
+      el.textContent = message;
+      el.className = isValid ? 'success' : 'error';
+    }
+
+    function validateLogin() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      setMessage('email-error', validEmail ? 'Valid email' : 'Enter a valid email address', validEmail);
+
+      const validPassword = password.length >= 6;
+      setMessage('password-error', validPassword ? 'Password length is good' : 'Password must be at least 6 characters', validPassword);
+
+      return validEmail && validPassword;
+    }
+
+    function submitLogin() {
+      if (validateLogin()) {
+        alert("Login successful! Redirecting...");
+        window.location.href = "NomNom.html";
+      }
+    }
+  </script>
+</body>
+</html>

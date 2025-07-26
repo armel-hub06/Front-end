@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NomNom - Register</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;600;700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-image: url("wallpaper.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+      color: white;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 999;
+      background: transparent;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .back-arrow {
+      font-size: 22px;
+      color: white;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .back-arrow:hover {
+      color: #FF5722;
+    }
+
+    header img {
+      width: 110px;
+      height: auto;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #FF5722;
+    }
+
+    .spacer {
+      height: 100px;
+    }
+
+    main {
+      width: 90%;
+      max-width: 500px;
+      margin: 130px auto 30px;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    main h2 {
+      margin-bottom: 25px;
+      font-size: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      background: #f2f2f2;
+      color: #333;
+    }
+
+    .error, .success {
+      font-size: 14px;
+      margin-top: 5px;
+      display: block;
+    }
+
+    .error {
+      color: #ff4d4d;
+    }
+
+    .success {
+      color: #4CAF50;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #FF5722;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: black;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <a href="#"><img src="logo.png" alt="NomNom Logo" /></a>
+      <a href="javascript:history.back()" class="back-arrow" title="Go Back">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="#">Help</a>
+      <a href="#">Contact</a>
+    </div>
+  </header>
+
+  <div class="spacer"></div>
+
+  <main>
+    <h2>Register</h2>
+    <div class="form-group">
+      <label for="fullname">Full Name</label>
+      <input id="fullname" type="text" placeholder="e.g. John Doe" oninput="validateLive()" />
+      <span id="name-error" class="error"></span>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="e.g. john@example.com" oninput="validateLive()" />
+      <span id="email-error" class="error"></span>
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone Number</label>
+      <input id="phone" type="text" placeholder="e.g. +254712345678" oninput="validateLive()" />
+      <span id="phone-error" class="error"></span>
+    </div>
+    <div class="form-group">
+      <label for="dob">Date of Birth</label>
+      <input id="dob" type="date" placeholder="YYYY-MM-DD" oninput="validateLive()" />
+      <span id="dob-error" class="error"></span>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input id="password" type="password" placeholder="e.g. StrongPass!123" oninput="validateLive()" />
+      <span id="password-error" class="error"></span>
+    </div>
+    <div class="form-group">
+      <label for="confirm-password">Confirm Password</label>
+      <input id="confirm-password" type="password" placeholder="Re-enter your password" oninput="validateLive()" />
+      <span id="confirm-error" class="error"></span>
+    </div>
+    <button onclick="validateForm()">Register</button>
+  </main>
+
+  <script>
+    function validateLive() {
+      validateForm(false);
+    }
+
+    function setMessage(id, message, isValid) {
+      const el = document.getElementById(id);
+      el.textContent = message;
+      el.className = isValid ? 'success' : 'error';
+    }
+
+    function validateForm(submit = true) {
+      let valid = true;
+
+      const name = document.getElementById('fullname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const dob = document.getElementById('dob').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+
+      setMessage('name-error', name === '' ? 'Full name is required.' : 'Looks good!', name !== '');
+      setMessage('email-error', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Email format is valid' : 'Invalid email format', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+      setMessage('phone-error', /^\+?\d{10,15}$/.test(phone) ? 'Valid phone number' : 'Invalid phone format. Use +254712345678', /^\+?\d{10,15}$/.test(phone));
+      setMessage('dob-error', dob !== '' ? 'Date of birth entered' : 'Date of birth is required', dob !== '');
+      setMessage('password-error', /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*]).{6,}$/.test(password) ? 'Strong password!' : 'Weak password – use uppercase, numbers, symbols', /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*]).{6,}$/.test(password));
+      setMessage('confirm-error', password === confirmPassword && confirmPassword !== '' ? 'Passwords match' : 'Passwords do not match', password === confirmPassword && confirmPassword !== '');
+
+      if (submit) {
+        valid = [...document.querySelectorAll('.error')].every(e => e.textContent === '');
+        if (valid) {
+          alert("Registration successful! Redirecting to login...");
+          window.location.href = "login.html";
+        }
+      }
+    }
+  </script>
+</body>
+</html>

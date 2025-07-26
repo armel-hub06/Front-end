@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- Leaflet CSS -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<!-- Leaflet JS -->
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+  <title>NomNom - Payment</title>
+  <style>
+    body {
+      font-family: 'Rubik', sans-serif;
+      padding: 20px;
+      background-color: #fefefe;
+      color: #333;
+    }
+    .container {
+      max-width: 650px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      background: white;
+    }
+    h2 {
+      margin-bottom: 10px;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    li {
+      margin-bottom: 15px;
+    }
+    .total {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 20px;
+      background-color: #1ed760;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .field {
+      margin-top: 20px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    #map {
+      width: 100%;
+      height: 250px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    #confirmation {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 18px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Order Summary</h2>
+    <ul id="summary-list"></ul>
+    <div class="total">Total: KSh<span id="summary-total"></span></div>
+    <div class="field">
+        <label for="address">Delivery Address (Kenya)</label>
+        <input type="text" id="address" placeholder="Type your location (e.g. Moi Avenue, Nairobi)" style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+        <div id="map" style="height: 300px;"></div>
+    </div>
+
+    <div class="field">
+      <label>PayBill: <span style="color:#FF5722;">339402</span></label>
+      <label for="payment-code">Paste Payment Code Here</label>
+      <input type="text" id="payment-code" placeholder="e.g. QW78212WS">
+    </div>
+
+    <div class="field">
+      <label for="name">Your Name</label>
+      <input type="text" id="customer-name" placeholder="e.g. Eddie">
+    </div>
+
+    <button class="btn" onclick="getYourFood()">Get Your Food</button>
+
+    <div id="confirmation"></div>
+  </div>
+
+  <script>
+    const basket = JSON.parse(localStorage.getItem('basket') || '{}');
+    const total = localStorage.getItem('total') || 0;
+    const list = document.getElementById('summary-list');
+    const totalSpan = document.getElementById('summary-total');
+    const confirmation = document.getElementById('confirmation');
+
+    Object.values(basket).forEach(item => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <div style="display: flex; align-items: center;">
+          <img src="${item.image}" alt="${item.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; margin-right: 10px;">
+          <div>
+            <strong>${item.name}</strong><br>
+            Quantity: ${item.quantity}<br>
+            Subtotal: KSh${item.quantity * item.price}
+          </div>
+        </div>
+      `;
+      list.appendChild(li);
+    });
+
+    totalSpan.textContent = total;
+
+const deliveryWorkers = ['Brian', 'Aisha', 'Kevin', 'Linda'];
+
+function getYourFood() {
+  const address = document.getElementById('address').value.trim();
+  const code = document.getElementById('payment-code').value.trim();
+  const name = document.getElementById('customer-name').value.trim();
+  const email = document.getElementById('customer-email')?.value.trim();
+
+  if (!address || !code || !name) {
+    alert("Please fill all fields before proceeding.");
+    return;
+  }
+
+  const worker = deliveryWorkers[Math.floor(Math.random() * deliveryWorkers.length)];
+
+  // Show confirmation popup message
+  setTimeout(() => {
+    if (confirm(`Your food is being delivered by ${worker}. Click OK to return to NomNom page.`)) {
+      window.location.href = 'index.html'; // Redirect to homepage
+    }
+  }, 300);
+
+  // Update confirmation section (if needed)
+  const confirmation = document.getElementById('confirmation');
+  if (confirmation) {
+    confirmation.innerHTML = `
+      ✅ Your food is being delivered by <strong>${worker}</strong>.<br>
+      Thank you, <strong>${name}</strong>! We’ll be at <em>${address}</em> soon. 🚴‍♂️
+    `;
+  }
+
+  // Optionally send email if EmailJS is set up
+  if (email && typeof emailjs !== 'undefined') {
+    emailjs.init("YOUR_USER_ID"); // replace with your actual ID
+
+    const templateParams = {
+      user_name: name,
+      user_email: email,
+      message: `Order Details:\nName: ${name}\nAddress: ${address}\nPayment Code: ${code}\nAssigned Worker: ${worker}`,
+    };
+
+    emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", templateParams)
+      .then(response => {
+        console.log("Email sent successfully:", response.status);
+      }, error => {
+        console.error("Failed to send email:", error);
+      });
+  }
+
+  // Clear basket storage
+  localStorage.clear();
+}
+
+  </script>
+<script>
+  const map = L.map('map').setView([-1.286389, 36.817223], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+  }).addTo(map);
+
+  let marker;
+  let typingTimer;
+  const delay = 500; 
+
+  document.getElementById('address').addEventListener('input', () => {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(geocodeAddress, delay);
+  });
+
+  function geocodeAddress() {
+    const address = document.getElementById('address').value.trim();
+    if (!address) return;
+
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address + ', Kenya')}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data && data.length > 0) {
+          const lat = parseFloat(data[0].lat);
+          const lon = parseFloat(data[0].lon);
+
+          map.setView([lat, lon], 16);
+
+          if (marker) {
+            marker.setLatLng([lat, lon]);
+          } else {
+            marker = L.marker([lat, lon]).addTo(map);
+          }
+        }
+      })
+      .catch(err => {
+        console.error("Geocoding error:", err);
+      });
+  }
+
+  // Fix map display if shown inside a modal or dynamically
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 300);
+</script>
+</body>
+</html>
